@@ -1,7 +1,7 @@
 (ns ^:figwheel-hooks turnstile-poc.core
   (:require
    [goog.dom :as gdom]
-   [reagent.core :as reagent :refer [atom]]
+   [reagent.core :as reagent]
    [turnstile-poc.partner :refer [partner-main]]
    [turnstile-poc.state :refer [state get-state]]))
 
