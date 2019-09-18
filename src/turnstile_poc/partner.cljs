@@ -1,34 +1,48 @@
 (ns turnstile-poc.partner
   (:require [reagent.core :refer [atom]]
-            [turnstile-poc.state :refer [get-state-data]]))
+            [turnstile-poc.state :refer [get-turnstile-data
+                                         save-partner-changes
+                                         start-editing
+                                         cancel-editing]]
+            [turnstile-poc.util :refer [update-form-atom]]))
 
-(defn partner-link [partner]
-  [:li.list-group-item (:partner-name partner)])
+(defn partner-link [partner-id {:keys [partner-name] :as partner}]
+  [:li.list-group-item
+   {:on-click (fn [e] (start-editing partner-id))}
+   partner-name])
 
 (defn partner-list [partner-list]
   [:div.card
-   [:h5.card-title "Partner List"]
+   [:h5.card-title.ml-2 "Partner List"]
    [:div.card-body
-    [:ul.list-group (for [partner partner-list]
-           ^{:key (:partner-key partner)} [partner-link partner])]]])
+    [:ul.list-group
+     (for [[partner-id partner] partner-list]
+       ^{:key partner-id} [partner-link partner-id partner])]]])
 
-(defn active-editing [{:keys [partner-name]}]
-  (let [p (atom {:partner-name partner-name})]
+(defn active-editing [{:keys [partner-id partner-name partner-api-key]
+                       :as partner}]
+  (let [p (atom partner)]
     (fn []
       [:form {:on-submit (fn [e]
                            (.preventDefault e)
-                           (js/console.log @p))}
+                           (save-partner-changes partner-id @p)
+                           (cancel-editing))}
        [:div.form-group
         [:label {:for "partnerName"} "Partner Name"]
-        [:input#partnerName.form-control {:type "text" :default-value partner-name
-                                          :on-change (fn [e]
-                                                       (swap! p
-                                                              assoc
-                                                              :partner-name
-                                                              (-> e
-                                                                  .-target
-                                                                  .-value)))}]]
-       [:button.btn.btn-primary "Save Changes"]])))
+        [:input#partnerName.form-control
+         {:type "text" :default-value partner-name
+          :on-change (partial update-form-atom p :partner-name)}]]
+       [:div.form-group
+        [:label {:for "partnerAPIKey"} "Partner API Key"]
+        [:input#partnerAPIKey.form-control
+         {:type "text" :default-value partner-api-key
+          :on-change (partial update-form-atom p :partner-api-key)}]]
+       [:button.btn.btn-primary.mr-1
+        "Save Changes"]
+       [:button.btn.btn-secondary
+        {:type "button"
+         :on-click cancel-editing}
+        "Cancel"]])))
 
 (defn editing-placeholder []
   [:div.jumbotron
@@ -36,16 +50,24 @@
 
 (defn edit-partner [partner-to-edit]
   [:div.card
-   [:h5.card-title "Edit Partner"]
+   [:h5.card-title.ml-2 "Edit Partner"]
    [:div.card-body
     (if partner-to-edit
       [active-editing partner-to-edit]
       [editing-placeholder])]])
 
-(defn partner-main []
-  (let [state-ref (get-state-data)]
-    [:main.container-fluid
-     [:div
-      [partner-list (:partners state-ref)]
-      [edit-partner (:partner-to-edit state-ref)]]]))
+(defn partner-header []
+  [:nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+   [:a.navbar-brand {:href "#"} "Turnstile POC"]
+   [:div.collapse.navbar-collapse
+    ]])
 
+(defn partner-main []
+  (let [turnstile-data (get-turnstile-data)]
+    [:main.container-fluid
+     [partner-header]
+     [:div.row.mt-2
+      [:div.col-sm
+       [partner-list (:partners turnstile-data)]]
+      [:div.col-sm
+       [edit-partner (:partner-to-edit turnstile-data)]]]]))

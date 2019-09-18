@@ -4,19 +4,6 @@
    [reagent.core :as reagent :refer [atom]]
    [turnstile-poc.partner :refer [partner-main]]))
 
-(println "This text is printed from src/turnstile_poc/core.cljs. Go ahead and edit it and see reloading in action.")
-
-(defn multiply [a b] (* a b))
-
-
-
-;; Quick state updates; useful for testing UI building.
-(comment
-  (swap! state assoc :partner-to-edit nil)
-  (swap! state assoc :partner-to-edit [{:partner-key 1
-                                        :partner-name "Lending Tree"}])
-  )
-
 
 (defn get-app-element []
   (gdom/getElement "app"))
