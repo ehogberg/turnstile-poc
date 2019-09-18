@@ -12,3 +12,4 @@ pom.xml
 .cpcache/
 .rebel_readline_history
 /resources/public/cljs-out/dev-main-auto-testing.js
+/*.js

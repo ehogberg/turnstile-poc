@@ -1,4 +1,6 @@
-(ns turnstile-poc.partner)
+(ns turnstile-poc.partner
+  (:require [reagent.core :refer [atom]]
+            [turnstile-poc.state :refer [get-state-data]]))
 
 (defn partner-link [partner]
   [:li.list-group-item (:partner-name partner)])
@@ -10,13 +12,29 @@
     [:ul.list-group (for [partner partner-list]
            ^{:key (:partner-key partner)} [partner-link partner])]]])
 
-(defn active-editing [partner-to-edit])
+(defn active-editing [{:keys [partner-name]}]
+  (let [p (atom {:partner-name partner-name})]
+    (fn []
+      [:form {:on-submit (fn [e]
+                           (.preventDefault e)
+                           (js/console.log @p))}
+       [:div.form-group
+        [:label {:for "partnerName"} "Partner Name"]
+        [:input#partnerName.form-control {:type "text" :default-value partner-name
+                                          :on-change (fn [e]
+                                                       (swap! p
+                                                              assoc
+                                                              :partner-name
+                                                              (-> e
+                                                                  .-target
+                                                                  .-value)))}]]
+       [:button.btn.btn-primary "Save Changes"]])))
 
 (defn editing-placeholder []
   [:div.jumbotron
    [:p.lead "Select a partner to edit their information here."]])
 
-(defn edit-partner [{:keys [partner-to-edit]}]
+(defn edit-partner [partner-to-edit]
   [:div.card
    [:h5.card-title "Edit Partner"]
    [:div.card-body
@@ -24,11 +42,10 @@
       [active-editing partner-to-edit]
       [editing-placeholder])]])
 
-(defn partner-main [state]
-  [:main.container-fluid
-   [:h1 "Turnstile : Partner Creation And Editing"]
-   [:div.row
-    [:div.col-sm-3 [partner-list (:partners state)]]
-    [:div.col-sm [edit-partner state]]]])
-
+(defn partner-main []
+  (let [state-ref (get-state-data)]
+    [:main.container-fluid
+     [:div
+      [partner-list (:partners state-ref)]
+      [edit-partner (:partner-to-edit state-ref)]]]))
 
