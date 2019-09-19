@@ -1,19 +1,29 @@
 (ns ^:figwheel-hooks turnstile-poc.core
   (:require
    [goog.dom :as gdom]
-   [reagent.core :as reagent :refer [atom]]
+   [reagent.core :as reagent]
    [turnstile-poc.partner :refer [partner-main]]))
 
 
-(defn get-app-element []
+(defn get-app-element
+  "Finds the root element to be used for
+   reactive rendering."
+  []
   (gdom/getElement "app"))
 
 
-(defn mount [el]
+(defn mount
+  "Given a root element, execute the main page
+   renderer and inject the generated content into
+   this element."
+  [el]
   (reagent/render-component [partner-main] el))
 
 
-(defn mount-app-element []
+(defn mount-app-element
+  "Conditionally starts the rendering process if a root
+   element has been defined."
+  []
   (when-let [el (get-app-element)]
     (mount el)))
 
