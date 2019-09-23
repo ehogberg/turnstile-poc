@@ -55,7 +55,9 @@
 
 (defn start-editing
   "Given a partner ID, locates the appropriate partner information in the
-   state atom, then launches an editing session using it."
+   state atom, then launches an editing session using it. We embed the
+   ID in the partner data as a convenience to the edit form renderer,
+   allowing it to easily locate and supply the ID to the update call."
   [partner-id]
   (let [partner-to-edit (-> (get-in @state [:partners partner-id])
                             (assoc :partner-id partner-id))]
