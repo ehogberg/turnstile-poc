@@ -103,11 +103,11 @@
    reactively build a list of partners and a conditionally
    displayed/hidden editing form."
   []
-  (let [turnstile-data (get-turnstile-data)]
+  (let [{:keys [partners partner-to-edit]} (get-turnstile-data)]
     [:main.container-fluid
      [partner-header]
      [:div.row.mt-2
       [:div.col-sm
-       [partner-list (:partners turnstile-data)]]
+       [partner-list partners]]
       [:div.col-sm
-       [edit-partner (:partner-to-edit turnstile-data)]]]]))
+       [edit-partner partner-to-edit]]]]))

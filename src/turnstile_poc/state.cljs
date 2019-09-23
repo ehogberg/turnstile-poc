@@ -24,10 +24,9 @@
    The turbo path to adding someone quickly to the partner list, mostly
    useful for building new partners via the REPL."
   [partner-name]
-  (let [partner-id (random-uuid)]
-    (swap! state update-in [:partners]
-           assoc partner-id {:partner-name partner-name
-                             :partner-api-key (random-uuid)})))
+  (swap! state update-in [:partners]
+         assoc (random-uuid) {:partner-name partner-name
+                              :partner-api-key (random-uuid)}))
 
 
 (defn delete-partner
