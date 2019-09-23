@@ -89,6 +89,7 @@
       [active-editing partner-to-edit]
       [editing-placeholder])]])
 
+
 (defn partner-header
   "Renders the page header."
   []
