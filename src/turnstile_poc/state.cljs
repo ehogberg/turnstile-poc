@@ -50,10 +50,8 @@
    In this case, a new UUID key is allocated and used for the persistence
    swap."
   [partner-id partner]
-  (let [partner-save-id (if-not partner-id
-                          (random-uuid)
-                          partner-id)]
-    (swap! state update-in [:partners] assoc partner-save-id partner)))
+  (swap! state update-in [:partners]
+         assoc (or partner-id (random-uuid)) partner))
 
 
 (defn start-editing

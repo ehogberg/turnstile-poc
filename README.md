@@ -11,19 +11,19 @@ Build-out goals were/are:
 
 ## Overview
 
-You'll need to be loaded for CLJS bear before starting.   `brew install clojure` will accomplish that for Homebrewers.   Other folks can consult <http://clojure.org/guides/getting_started.>
+You'll need to be loaded for CLJS bear before starting.   `brew install clojure` will accomplish that for Homebrewers.   Other folks can consult <http://clojure.org/guides/getting_started>
 
 Once you're prepped, execute:
 
 	lein fig:build
 	
-which will start a CLJS repl, launch the app and display in a browser window.
+which will start a CLJS repl, launch the app and display it in a browser window.
 
-The UI is simple to the point of laughability, and hopefully self explanatory.   Dual pane SPA, left side lists known partners (launches with one partner defined),  Blue add icon lets you define a new one which is edited in the right side pane.   Click on the blue edit icons on existing partner entries to change them.   Save/cancel do what you'd expect on the editor pane.  The red trash can on partner list entries also does what you'd expect a red trash can icon to do.
+The UI is simple to the point of laughability, and hopefully self explanatory.   Dual pane SPA, left side lists known partners (launches with one partner defined),  Blue add icon lets you define a new one which is edited in the right side pane.   Click on the blue edit icons on existing partner entries to change them.   Save/cancel do what you'd expect on the editor pane.  The red trash can on partner list entries also does what you'd expect a red trash can icon to do.  (It does what I'd expect a red trash can to do, at least.  If you expect something else, we should talk.)
 
 .cljs code is liberally commented and hopefully also close to self-explanatory.  Three namespaces of interest, `.core` (mostly boilerplate launch code, of little interest beyond understanding how a CLJS app can bootstrap itself), `.partner` (renders the UI),  `.state` (manages the in-memory list of partners).   As a reminder, nothing is actually stored by this app; create, save and delete to your heart's content.
 
-I welcome questions; contact me and I'll not only answer but will add my answer to this README so other folks can benefit as well.
+Questions welcome, of course; contact me and I'll not only answer but will add my answer to this README so other folks can benefit from your curiosity as well.
 
 
 ## Development
